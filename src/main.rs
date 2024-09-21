@@ -88,6 +88,18 @@ fn alive_neighbors(grid: &Vec<Vec<bool>>, x: i32, y: i32) -> u8 {
     alive
 }
 
+/// Generate and fill a random configuration of the grid.
+fn random_configuration(grid: &mut Vec<Vec<bool>>) {
+    let mut rng = rand::thread_rng();
+    for r in grid {
+        for c in r {
+            if rng.gen_bool(0.25) {
+                *c = true;
+            }
+        }
+    }
+}
+
 fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
@@ -111,13 +123,7 @@ fn main() {
     // The "grid" is a 2-dimensional state object that stores the alive / dead
     // status of each of its cells.
     let mut grid = vec![vec![false; grid_width]; grid_height];
-
-    // Set up a glider configuration from the top left.
-    grid[0][1] = true;
-    grid[1][2] = true;
-    grid[2][0] = true;
-    grid[2][1] = true;
-    grid[2][2] = true;
+    random_configuration(&mut grid);
 
     let sleep_duration = Duration::from_millis(100);
 
