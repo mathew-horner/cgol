@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use clap::{Parser, ValueEnum};
 use pixels::{Pixels, SurfaceTexture};
 use rand::Rng;
 use winit::event_loop::EventLoop;
@@ -16,6 +17,8 @@ struct Rgb(u8, u8, u8);
 impl Rgb {
     /// Plain black.
     const BLACK: Rgb = Rgb(0, 0, 0);
+    /// Plain white.
+    const WHITE: Rgb = Rgb(255, 255, 255);
 
     /// Generate a random color.
     fn random() -> Self {
@@ -100,8 +103,25 @@ fn random_configuration(grid: &mut Vec<Vec<bool>>) {
     }
 }
 
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+struct Cli {
+    #[arg(long, default_value_t = ColorMode::Monochrome)]
+    color_mode: ColorMode,
+}
+
+#[derive(ValueEnum, strum::Display, Clone)]
+#[strum(serialize_all = "lowercase")]
+enum ColorMode {
+    /// Cells will be rendered as plain white.
+    Monochrome,
+    /// Cells will be rendered with a random color.
+    Random,
+}
+
 fn main() {
     env_logger::init();
+    let args = Cli::parse();
     let event_loop = EventLoop::new();
     let window = Window::new(&event_loop).unwrap();
     let size = window.inner_size();
@@ -127,6 +147,11 @@ fn main() {
 
     let sleep_duration = Duration::from_millis(100);
 
+    let color_gen = match args.color_mode {
+        ColorMode::Monochrome => || Rgb::WHITE,
+        ColorMode::Random => || Rgb::random(),
+    };
+
     std::thread::spawn(move || loop {
         log::trace!("Tick");
         let frame = pixels.frame_mut();
@@ -145,7 +170,7 @@ fn main() {
         for y in 0..grid_height {
             for x in 0..grid_width {
                 if grid[y][x] {
-                    fill_cell(frame, pixel_buffer_width, GridCoords { x, y }, Rgb::random());
+                    fill_cell(frame, pixel_buffer_width, GridCoords { x, y }, color_gen());
                 }
             }
         }
