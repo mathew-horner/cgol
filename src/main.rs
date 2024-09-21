@@ -66,11 +66,13 @@ fn alive_neighbors(grid: &Vec<Vec<bool>>, x: i32, y: i32) -> u8 {
     let grid_height = grid.len();
     let mut alive = 0;
     for offset in OFFSETS {
+        // Ensure that x and y for this offset are in range, otherwise skip it.
         let Some(x) = usize::try_from(x + offset.0).ok() else { continue };
         let Some(y) = usize::try_from(y + offset.1).ok() else { continue };
         if x >= grid_width || y >= grid_height {
             continue;
         }
+
         if grid[y][x] {
             alive += 1;
         }
@@ -144,16 +146,16 @@ fn main() {
             for x in 0..grid_width {
                 let alive = grid[y][x];
                 let alive_neighbors = alive_neighbors(&grid, x as i32, y as i32);
-                if alive {
-                    // Increment the alive count so we don't exit the game prematurely.
-                    alive_count += 1;
 
-                    if (2..=3).contains(&alive_neighbors) {
-                        next_grid[y][x] = true;
-                    }
-                } else if alive_neighbors == 3 {
-                    next_grid[y][x] = true;
+                // Increment the alive count so we don't exit the game prematurely.
+                if alive {
+                    alive_count += 1;
                 }
+
+                match (alive, alive_neighbors) {
+                    (true, 2..=3) | (false, 3) => next_grid[y][x] = true,
+                    _ => {},
+                };
             }
         }
 
