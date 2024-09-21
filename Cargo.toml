@@ -1,0 +1,11 @@
+[package]
+name = "cgol2"
+version = "0.1.0"
+edition = "2021"
+publish = ["phylum"]
+
+[dependencies]
+env_logger = { version = "0.11.5", registry = "phylum" }
+log = { version = "0.4.22", registry = "phylum" }
+pixels = { version = "0.13.0", registry = "phylum" }
+winit = { version = "0.28.0", registry = "phylum" }
