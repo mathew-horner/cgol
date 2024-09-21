@@ -92,11 +92,11 @@ fn alive_neighbors(grid: &Vec<Vec<bool>>, x: i32, y: i32) -> u8 {
 }
 
 /// Generate and fill a random configuration of the grid.
-fn random_configuration(grid: &mut Vec<Vec<bool>>) {
+fn random_configuration(grid: &mut Vec<Vec<bool>>, chance: f64) {
     let mut rng = rand::thread_rng();
     for r in grid {
         for c in r {
-            if rng.gen_bool(0.25) {
+            if rng.gen_bool(chance) {
                 *c = true;
             }
         }
@@ -108,6 +108,9 @@ fn random_configuration(grid: &mut Vec<Vec<bool>>) {
 struct Cli {
     #[arg(long, default_value_t = ColorMode::Monochrome)]
     color_mode: ColorMode,
+
+    #[arg(long, default_value_t = 0.25)]
+    alive_random_chance: f64,
 }
 
 #[derive(ValueEnum, strum::Display, Clone)]
@@ -143,7 +146,7 @@ fn main() {
     // The "grid" is a 2-dimensional state object that stores the alive / dead
     // status of each of its cells.
     let mut grid = vec![vec![false; grid_width]; grid_height];
-    random_configuration(&mut grid);
+    random_configuration(&mut grid, args.alive_random_chance);
 
     let sleep_duration = Duration::from_millis(100);
 
