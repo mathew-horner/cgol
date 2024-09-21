@@ -255,6 +255,12 @@ source = "sparse+https://cargo.phylum.io/"
 checksum = "94bbb0ad554ad961ddc5da507a12a29b14e4ae5bda06b19f575a3e6079d2e2ae"
 
 [[package]]
+name = "byteorder"
+version = "1.5.0"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
+
+[[package]]
 name = "calloop"
 version = "0.10.6"
 source = "sparse+https://cargo.phylum.io/"
@@ -298,6 +304,7 @@ dependencies = [
  "env_logger",
  "log",
  "pixels",
+ "rand",
  "winit",
 ]
 
@@ -466,6 +473,17 @@ name = "foreign-types-shared"
 version = "0.1.1"
 source = "sparse+https://cargo.phylum.io/"
 checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
+
+[[package]]
+name = "getrandom"
+version = "0.2.15"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "c4567c8db10ae91089c99af84c68c38da3ec2f087c3f82960bcdbf3656b6f4d7"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "wasi",
+]
 
 [[package]]
 name = "gimli"
@@ -1062,6 +1080,15 @@ source = "sparse+https://cargo.phylum.io/"
 checksum = "22686f4785f02a4fcc856d3b3bb19bf6c8160d103f7a99cc258bddd0251dc7f2"
 
 [[package]]
+name = "ppv-lite86"
+version = "0.2.20"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "77957b295656769bb8ad2b6a6b09d897d94f05c41b069aede1fcdaa675eaea04"
+dependencies = [
+ "zerocopy",
+]
+
+[[package]]
 name = "proc-macro-crate"
 version = "1.3.1"
 source = "sparse+https://cargo.phylum.io/"
@@ -1093,6 +1120,36 @@ source = "sparse+https://cargo.phylum.io/"
 checksum = "b5b9d34b8991d19d98081b46eacdd8eb58c6f2b201139f7c5f643cc155a633af"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "rand"
+version = "0.8.5"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "34af8d1a0e25924bc5b7c43c079c942339d8f0a8b57c39049bef581b46327404"
+dependencies = [
+ "libc",
+ "rand_chacha",
+ "rand_core",
+]
+
+[[package]]
+name = "rand_chacha"
+version = "0.3.1"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "e6c10a63a0fa32252be49d21e7709d4d4baf8d231c2dbce1eaa8141b9b127d88"
+dependencies = [
+ "ppv-lite86",
+ "rand_core",
+]
+
+[[package]]
+name = "rand_core"
+version = "0.6.4"
+source = "sparse+https://cargo.phylum.io/"
+checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
+dependencies = [
+ "getrandom",
 ]
 
 [[package]]
@@ -2026,6 +2083,7 @@ version = "0.7.35"
 source = "sparse+https://cargo.phylum.io/"
 checksum = "1b9b4fd18abc82b8136838da5d50bae7bdea537c574d8dc1a34ed098d6c166f0"
 dependencies = [
+ "byteorder",
  "zerocopy-derive",
 ]
 

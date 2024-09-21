@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use pixels::{Pixels, SurfaceTexture};
+use rand::Rng;
 use winit::event_loop::EventLoop;
 use winit::window::Window;
 
@@ -15,8 +16,15 @@ struct Rgb(u8, u8, u8);
 impl Rgb {
     /// Plain black.
     const BLACK: Rgb = Rgb(0, 0, 0);
-    /// Plain white.
-    const WHITE: Rgb = Rgb(255, 255, 255);
+
+    /// Generate a random color.
+    fn random() -> Self {
+        let mut rng = rand::thread_rng();
+        let r = rng.gen_range(0..=255);
+        let g = rng.gen_range(0..=255);
+        let b = rng.gen_range(0..=255);
+        Self(r, g, b)
+    }
 }
 
 /// A location in grid space.
@@ -131,7 +139,7 @@ fn main() {
         for y in 0..grid_height {
             for x in 0..grid_width {
                 if grid[y][x] {
-                    fill_cell(frame, pixel_buffer_width, GridCoords { x, y }, Rgb::WHITE);
+                    fill_cell(frame, pixel_buffer_width, GridCoords { x, y }, Rgb::random());
                 }
             }
         }
