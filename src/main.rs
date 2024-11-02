@@ -3,12 +3,16 @@ use std::time::Duration;
 use clap::{Parser, ValueEnum};
 use pixels::{Pixels, SurfaceTexture};
 use rand::Rng;
+use winit::dpi::PhysicalSize;
 use winit::event_loop::EventLoop;
-use winit::window::Window;
+use winit::window::WindowBuilder;
 
 /// A "cell" in the grid has this number of pixels along its height and width,
 /// and each cell is offset by a multiple of this number.
 const PIXELS_PER_CELL: usize = 16;
+
+const WINDOW_WIDTH: usize = 800;
+const WINDOW_HEIGHT: usize = 640;
 
 /// A color with red, green, and blue components.
 #[derive(Clone, Copy)]
@@ -126,12 +130,11 @@ fn main() {
     env_logger::init();
     let args = Cli::parse();
     let event_loop = EventLoop::new();
-    let window = Window::new(&event_loop).unwrap();
-    let size = window.inner_size();
-    let pixel_buffer_width = size.width as usize;
-    let pixel_buffer_height = size.height as usize;
+    let size = PhysicalSize::new(WINDOW_WIDTH as f64, WINDOW_HEIGHT as f64);
+    let window = WindowBuilder::new().with_inner_size(size).build(&event_loop).unwrap();
 
-    log::info!("Window size: w = {}, h = {}", size.width, size.height);
+    let pixel_buffer_width = WINDOW_WIDTH;
+    let pixel_buffer_height = WINDOW_HEIGHT;
 
     // In order to properly render the game, we *need* the screen size in each
     // direction to be a multiple of the PIXELS_PER_CELL value.
@@ -140,8 +143,8 @@ fn main() {
 
     let grid_width = pixel_buffer_width / PIXELS_PER_CELL;
     let grid_height = pixel_buffer_height / PIXELS_PER_CELL;
-    let surface_texture = SurfaceTexture::new(size.width, size.height, &window);
-    let mut pixels = Pixels::new(size.width, size.height, surface_texture).unwrap();
+    let surface_texture = SurfaceTexture::new(pixel_buffer_width as u32, pixel_buffer_height as u32, &window);
+    let mut pixels = Pixels::new(pixel_buffer_width as u32, pixel_buffer_height as u32, surface_texture).unwrap();
 
     // The "grid" is a 2-dimensional state object that stores the alive / dead
     // status of each of its cells.
